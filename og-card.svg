@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="35%" stop-color="#0a0612" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.55"/>
+    </radialGradient>
+    <linearGradient id="lobeGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d8b4ff"/>
+      <stop offset="60%" stop-color="#a855f7"/>
+      <stop offset="100%" stop-color="#5b1f99"/>
+    </linearGradient>
+    <linearGradient id="lobeGradOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="60%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#9a4f17"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0612"/>
+
+  <!-- Hex grid -->
+  <g opacity="0.18" stroke="#2e1d44" stroke-width="1" fill="none">
+    <pattern id="hex" width="60" height="52" patternUnits="userSpaceOnUse">
+      <path d="M30 1 L58 17 L58 35 L30 51 L2 35 L2 17 Z"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#hex)"/>
+  </g>
+
+  <!-- Methane-style lobe cluster (decorative) -->
+  <g transform="translate(380 320)">
+    <!-- 4 sp3 lobes radiating tetrahedrally projected to 2D -->
+    <g stroke="#0a0512" stroke-width="3">
+      <!-- top lobe -->
+      <ellipse cx="0" cy="-110" rx="34" ry="80" fill="url(#lobeGrad)"/>
+      <!-- right lobe -->
+      <ellipse cx="100" cy="40" rx="34" ry="80" fill="url(#lobeGrad)" transform="rotate(70 100 40)"/>
+      <!-- left lobe -->
+      <ellipse cx="-100" cy="40" rx="34" ry="80" fill="url(#lobeGrad)" transform="rotate(-70 -100 40)"/>
+      <!-- back-down lobe -->
+      <ellipse cx="0" cy="120" rx="34" ry="80" fill="url(#lobeGrad)" transform="rotate(180 0 120)"/>
+      <!-- lone-pair orange accent -->
+      <ellipse cx="-160" cy="-90" rx="22" ry="50" fill="url(#lobeGradOrange)" transform="rotate(-30 -160 -90)"/>
+    </g>
+    <!-- Central atom -->
+    <circle cx="0" cy="0" r="22" fill="#2d2d2d" stroke="#0a0512" stroke-width="3"/>
+    <!-- Hydrogen atoms (cream spheres) -->
+    <g stroke="#0a0512" stroke-width="3">
+      <circle cx="0"  cy="-180" r="14" fill="#cfcfcf"/>
+      <circle cx="160" cy="80"  r="14" fill="#cfcfcf"/>
+      <circle cx="-160" cy="80" r="14" fill="#cfcfcf"/>
+      <circle cx="0"   cy="190" r="14" fill="#cfcfcf"/>
+    </g>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="JetBrains Mono, monospace" font-weight="700">
+    <text x="700" y="240" font-size="76" letter-spacing="10" fill="#fef3c7">MOLECULE</text>
+    <text x="700" y="318" font-size="76" letter-spacing="10" fill="#a855f7">FORGE</text>
+    <text x="700" y="370" font-size="22" letter-spacing="6" fill="#a78bfa" font-weight="500">FORGE MOLECULES THROUGH VSEPR</text>
+
+    <!-- Color key strip -->
+    <g transform="translate(700 430)" font-size="18" letter-spacing="3" fill="#fef3c7" font-weight="500">
+      <rect x="0"   y="0" width="22" height="22" fill="#38bdf8" stroke="#0a0512" stroke-width="2"/>
+      <text x="32" y="17">s</text>
+      <rect x="70"  y="0" width="22" height="22" fill="#a855f7" stroke="#0a0512" stroke-width="2"/>
+      <text x="102" y="17">p</text>
+      <rect x="140" y="0" width="22" height="22" fill="#ec4899" stroke="#0a0512" stroke-width="2"/>
+      <text x="172" y="17">d</text>
+      <rect x="210" y="0" width="22" height="22" fill="#facc15" stroke="#0a0512" stroke-width="2"/>
+      <text x="242" y="17">f</text>
+      <rect x="280" y="0" width="22" height="22" fill="#fb923c" stroke="#0a0512" stroke-width="2"/>
+      <text x="312" y="17" letter-spacing="2">LP</text>
+    </g>
+
+    <text x="700" y="510" font-size="16" fill="#a78bfa" letter-spacing="2" font-weight="400">16 molecules · 5 geometries · cel-shaded 3D</text>
+  </g>
+
+  <!-- Vignette overlay -->
+  <rect width="1200" height="630" fill="url(#vignette)"/>
+</svg>

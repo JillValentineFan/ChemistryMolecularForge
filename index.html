@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1280" />
+  <title>MoleculeForge — Forge molecules with VSEPR</title>
+  <meta name="description" content="A 3D chemistry game where every correct answer assembles a molecule, piece by piece. Cel-shaded textbook-style orbital art, 16 molecules covering all 5 VSEPR geometries." />
+  <meta name="theme-color" content="#0a0612" />
+  <meta name="color-scheme" content="dark" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MoleculeForge" />
+  <meta property="og:description" content="Forge molecules through the science of VSEPR. Cel-shaded 3D chemistry game." />
+  <meta property="og:image" content="og-card.svg" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MoleculeForge" />
+  <meta name="twitter:description" content="Forge molecules through the science of VSEPR. Cel-shaded 3D chemistry game." />
+  <meta name="twitter:image" content="og-card.svg" />
+
+  <!-- Favicon (inline SVG: purple p-orbital silhouette) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230a0612'/%3E%3Cellipse cx='32' cy='22' rx='12' ry='18' fill='%23a855f7'/%3E%3Cellipse cx='32' cy='46' rx='8' ry='10' fill='%23a855f7' opacity='0.7'/%3E%3Ccircle cx='32' cy='34' r='3' fill='%23fef3c7'/%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three":          "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/":  "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<!-- ===================== MAIN MENU ===================== -->
+<section id="main-menu" class="screen active">
+  <div class="menu-frame">
+    <h1 class="brand">MOLECULE<span>FORGE</span></h1>
+    <p class="subtitle">Forge molecules through the science of VSEPR</p>
+    <nav class="menu-buttons">
+      <button data-mode="forge"      class="btn-major">Enter the Forge</button>
+      <button data-mode="learn"      class="btn-minor">The Codex</button>
+      <button data-mode="polarity"   class="btn-minor">Polarity Trial</button>
+      <button data-mode="collection" class="btn-minor">Forged Collection</button>
+      <button data-action="legend"   class="btn-minor">Color Key</button>
+    </nav>
+    <div class="menu-footer">
+      <label class="mute-toggle">
+        <input type="checkbox" id="mute-checkbox" />
+        <span>Sound</span>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FORGE MODE ===================== -->
+<section id="forge-mode" class="screen">
+  <header class="hud-top">
+    <button class="back-btn" data-back>← Menu</button>
+    <div class="hud-center">
+      <span class="progress" id="forge-progress">Molecule 1 / 12</span>
+      <span class="streak" id="forge-streak"></span>
+    </div>
+    <div class="hud-right">
+      <button class="btn-icon" data-action="legend" title="Color key (L)">KEY</button>
+      <span class="score-label">SCORE</span>
+      <span class="score" id="forge-score">0</span>
+    </div>
+  </header>
+
+  <canvas id="forge-canvas" class="render-canvas"></canvas>
+
+  <aside class="blueprint-card" id="forge-blueprint">
+    <div class="blueprint-label">BLUEPRINT</div>
+    <div class="blueprint-name" id="forge-name">—</div>
+    <div class="blueprint-formula" id="forge-formula">—</div>
+    <div class="blueprint-silhouette" id="forge-silhouette"></div>
+  </aside>
+
+  <div class="question-card" id="forge-question">
+    <div class="question-stage" id="forge-stage">Stage 1 / 4</div>
+    <div class="question-text" id="forge-question-text"></div>
+    <div class="answer-options" id="forge-options"></div>
+    <div class="question-hint" id="forge-hint"></div>
+  </div>
+
+  <div class="forge-banner" id="forge-banner"></div>
+
+  <div class="fact-card" id="fact-card">
+    <div class="fact-label">DID YOU KNOW</div>
+    <div class="fact-text" id="fact-text"></div>
+  </div>
+
+  <div class="forge-summary" id="forge-summary">
+    <h2>FORGED</h2>
+    <div class="summary-name" id="summary-name"></div>
+    <div class="summary-meta" id="summary-meta"></div>
+    <div class="summary-explanation" id="summary-explanation"></div>
+    <div class="summary-actions">
+      <button id="btn-collect">Add to Collection</button>
+      <button id="btn-next" class="btn-major">Next Molecule</button>
+    </div>
+  </div>
+
+  <div class="forge-final" id="forge-final">
+    <h2>RUN COMPLETE</h2>
+    <div class="final-stats" id="final-stats"></div>
+    <div class="final-actions">
+      <button data-back>Back to Menu</button>
+      <button data-mode="forge" class="btn-major">Forge Again</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEARN MODE ===================== -->
+<section id="learn-mode" class="screen">
+  <header class="hud-top">
+    <button class="back-btn" data-back>← Menu</button>
+    <div class="hud-center"><span class="codex-title">THE CODEX</span></div>
+    <div class="hud-right">
+      <button class="btn-icon" data-action="legend" title="Color key (L)">KEY</button>
+    </div>
+  </header>
+
+  <div class="learn-layout">
+    <aside class="codex-list" id="codex-list"></aside>
+    <main class="learn-render">
+      <canvas id="learn-canvas" class="render-canvas"></canvas>
+      <div class="learn-info-panel" id="learn-info"></div>
+      <div class="learn-controls">
+        <button data-action="toggle-labels" id="btn-labels">Labels: ON</button>
+        <button data-action="toggle-angles" id="btn-angles">Bond Angles: OFF</button>
+      </div>
+    </main>
+  </div>
+</section>
+
+<!-- ===================== POLARITY TRIAL ===================== -->
+<section id="polarity-mode" class="screen">
+  <header class="hud-top">
+    <button class="back-btn" data-back>← Menu</button>
+    <div class="hud-center">
+      <span class="progress" id="trial-progress">1 / 8</span>
+    </div>
+    <div class="hud-right">
+      <button class="btn-icon" data-action="legend" title="Color key (L)">KEY</button>
+      <span class="score-label">SCORE</span>
+      <span class="score" id="trial-score">0</span>
+    </div>
+  </header>
+
+  <div class="trial-timer-bar"><div class="trial-timer-fill" id="trial-timer-fill"></div></div>
+
+  <canvas id="polarity-canvas" class="render-canvas"></canvas>
+
+  <div class="trial-prompt" id="trial-prompt">
+    <div class="trial-formula" id="trial-formula">—</div>
+    <div class="trial-question">Polar or Nonpolar?</div>
+    <div class="trial-buttons">
+      <button data-answer="polar"    class="btn-trial">POLAR</button>
+      <button data-answer="nonpolar" class="btn-trial">NONPOLAR</button>
+    </div>
+    <div class="trial-result" id="trial-result"></div>
+  </div>
+
+  <div class="trial-final" id="trial-final">
+    <h2>TRIAL COMPLETE</h2>
+    <div class="trial-stats" id="trial-stats"></div>
+    <div class="final-actions">
+      <button data-back>Menu</button>
+      <button data-mode="polarity" class="btn-major">Run Again</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== COLLECTION ===================== -->
+<section id="collection-mode" class="screen">
+  <header class="hud-top">
+    <button class="back-btn" data-back>← Menu</button>
+    <div class="hud-center"><span class="codex-title">FORGED COLLECTION</span></div>
+    <div class="hud-right">
+      <span id="collection-count" class="score">0 / 16</span>
+    </div>
+  </header>
+  <div class="collection-grid" id="collection-grid"></div>
+</section>
+
+<!-- ===================== LEGEND MODAL (global) ===================== -->
+<div class="legend-modal" id="legend-modal" aria-hidden="true">
+  <div class="legend-modal-content" role="dialog" aria-labelledby="legend-title">
+    <button class="legend-close" data-action="close-legend" aria-label="Close legend">×</button>
+    <h2 id="legend-title">Color Key</h2>
+    <p class="legend-intro">Every color in MoleculeForge teaches. Hybrid lobe colors are weighted blends of pure orbital colors — the color <em>is</em> the lesson.</p>
+
+    <h3>Pure Orbital Colors</h3>
+    <div class="legend-grid" id="legend-orbitals"></div>
+
+    <h3>Hybrid Orbitals (lobe colors derive from these)</h3>
+    <div class="legend-grid" id="legend-hybrids"></div>
+
+    <h3>Semantic Colors</h3>
+    <div class="legend-grid" id="legend-semantic"></div>
+
+    <h3>Atoms (CPK Convention)</h3>
+    <div class="legend-grid" id="legend-atoms"></div>
+
+    <p class="legend-footer">Press <kbd>L</kbd> any time to open this. Press <kbd>Esc</kbd> to close.</p>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
