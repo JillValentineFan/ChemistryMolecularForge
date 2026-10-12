@@ -1,5 +1,6 @@
 /*
  * Assignment 4 - Question 1 (do-while version)
+ * Author  : Ahmed Mohamed Fathi (F25SP2826), Section 31
  * Purpose : Display the sentence "I Love Programming" 30 times
  *           using a do-while loop.
  */

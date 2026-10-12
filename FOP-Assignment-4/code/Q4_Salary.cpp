@@ -1,5 +1,6 @@
 /*
  * Assignment 4 - Question 4
+ * Author  : Ahmed Mohamed Fathi (F25SP2826), Section 31
  * Purpose : Calculate the salary for one week based on the
  *           working hours of each working day.
  *           Rate for 1 hour = RM 8.00

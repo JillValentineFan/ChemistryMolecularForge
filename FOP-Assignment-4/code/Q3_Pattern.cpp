@@ -1,5 +1,6 @@
 /*
  * Assignment 4 - Question 3
+ * Author  : Ahmed Mohamed Fathi (F25SP2826), Section 31
  * Purpose : Ask the user for the number of rows and display
  *           a number pattern. Example for 5 rows:
  *             1

@@ -1,5 +1,6 @@
 /*
  * Assignment 4 - Question 2 (for version)
+ * Author  : Ahmed Mohamed Fathi (F25SP2826), Section 31
  * Purpose : Display the sentence "I Love Programming" X times,
  *           where X is entered by the user, using a for loop.
  */
